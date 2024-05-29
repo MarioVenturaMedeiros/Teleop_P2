@@ -1,91 +1,114 @@
-# Inteli - Instituto de Tecnologia e Liderança 
+# Turtlebot teleoperado - parte 2
 
-<p align="center">
-<a href= "https://www.inteli.edu.br/"><img src="docs/static/img/inteli.png" alt="Inteli - Instituto de Tecnologia e Liderança" border="0"></a>
-</p>
+Neste projeto foi feito uma interface para controle de um robô turtlebot3 burger. Além disso, pela interface o usuário consegue ver imagens transmitidas por uma câmera acoplada ao robô. Caso queira ver uma demostração,  [Clique aqui](A_DEFINIR). Note que esse projeto tem a origem [nesse repositório](https://github.com/Inteli-College/2024-1B-T08-EC06-G05). A única coisa que o autor Mário Ventura Medeiros não tem autoria que está presente nesse repositório é o CSS dos componentes, autoria de [Gustavo Machado](https://github.com/gustavoesteves0).
 
-# Grupo: SugarZ3ro
+# Mudanças da parte 1 para a parte 2
 
-## :student: Integrantes:
+Para ver o repositório da parte 1, [clique aqui](https://github.com/MarioVenturaMedeiros/Ponderadas_M6). Visto que o frontend foi construído em react, houve a necessidade de alterar o script de movimentação para um componente react. Assim foi criado o componente rosbridge_movement. Esse script é responsável por fazer a comunicação do robô pelo frontend por meio do ROSBridge (uma ferramenta que permite a comunicação entre sistemas ROS (Robot Operating System) e aplicações externas via WebSockets, facilitando a integração de robôs com web serviços e outras tecnologias), assim enviando as informações publicadas no tópico /cmd_vel, tópico ROS responsável pela movimentação do turtlebot3 burger. Note que o script de movimentação feito em Python continua presente no projeto, com o intuito de ser utilizado em última instância caso algum problema tenha ocorrido com a aplicação WEB.
 
-- <a href="https://www.linkedin.com/in/gustavo-machado-esteves-453b81248/">Gustavo Machado Esteves</a>
-- <a href="https://www.linkedin.com/in/gustavo-gouveia-583185271//">Gustavo Gouveia</a>
-- <a href="https://www.linkedin.com/in/isabelle-beatriz-vasquez-oliveira-55a19626a/">Isabelle Beatriz Vasquez</a>
-- <a href="https://www.linkedin.com/in/lucasdeluccas/">Lucas de Luccas</a>
-- <a href="https://www.linkedin.com/in/m%C3%A1rio-ventura-medeiros-123682291/">Mário Ventura Medeiros</a>
-- <a href="https://www.linkedin.com/in/raideoliveira/">Raí de Oliveira</a>
+# Como rodar o projeto
 
-## :teacher: Professores:
+## Pré-requisitos
 
-### Orientador
+- ROS2 instalado no sistema operacional (Linux Ubuntu) da Raspberry do Turtlebot 3 e do computador usado para operá-lo remotamente
 
-- <a href="https://www.linkedin.com/in/rodrigo-mangoni-nicola-537027158/">Rodrigo Mangoni Nicola</a>
+- [Pacote ROS do Turtlebot 3](https://github.com/ROBOTIS-GIT/turtlebot3/tree/master) instalado no sistema operacional (Linux Ubuntu) da Raspberry do Turtlebot 3 e do computador usado para operá-lo remotamente
 
-### Instrutores
+- Raspberry do Turtlebot 3 e computador usado para operá-lo remotamente conectados na mesma rede wi-fi
 
-- <a href="https://www.linkedin.com/in/gui-cestari/">Guilherme Cestari</a>
-- <a href="https://www.linkedin.com/in/murilo-zanini-de-carvalho-0980415b/">Murilo Zanini</a>
-- <a href="https://www.linkedin.com/in/lisane-valdo/">Lisane Valdo</a>
-- <a href="https://www.linkedin.com/in/geraldo-magela-severino-vasconcelos-22b1b220/">Geraldo Magela Vasconcelos</a>
-- <a href="https://www.linkedin.com/in/monica-anastassiu-d-sc-2568522/">Monica Anastassiu</a>
-- <a href="https://www.linkedin.com/in/andr%C3%A9-leal-a57b2065/">André Leal</a>
+- Git instalado no computador usado para operar o robô remotamente
+
+- Pacote ROSBridge do Turtlebot 3 instalado no sistema operacional (Linux Ubuntu) da Raspberry do Turtlebot 3 e do computador usado para operá-lo remotamente
+
+- Node.js atualizado no sistema operacional (Linux Ubuntu) da Raspberry do Turtlebot 3
+
+## Comunicação via SSH
 
 
-## :memo: Descrição do projeto
+### Passo a passo
 
-### Robô teleoperado com visão computacional aplicada
+1. No sistema operacional da Raspberry contida no Turtlebot 3 a ser controlado, abra uma janela de terminal e digite os seguintes comandos para encontrar o IP do Turtlebot 3 dado pela rede:
 
-## Problema
+```bash
+    ip addr
+```
 
-Nas usinas da Atvos, existem estruturas cuja funcionalidade é superaquecer o caldo extraído da cana para torná-lo mais concentrado e prosseguir com o processo de fabricação de açúcar. Essas estruturas, denominadas "reboilers" são máquinas de formato cilíndrico vertical com cerca de 2.000 tubos em seu interior, os quais conduzem o caldo extraído durante o período de funcionamento e, como efeito indesejado, têm seu interior obstruído por impurezas. 
+Copie o número registrado em Wlan que vem antes da "/" (exemplo: 10.128.0.30). Esse será o IP que será utilizado para comunicação do robô para a aplicação WEB.
 
-Essa obstrução prejudica a produtividade dos reboilers e só é remediada através de um processo de limpeza realizado por funcionários do setor operacional da Atvos, o qual é feito com o auxílio de uma máquina que trabalha com níveis de pressão potencialmente nocivos à integridade física destes. Além disso, essa limpeza ocorre de maneira demorada e indiferente: cada tubo de cada reboiler é limpo independentemente de seu estado, já que atualmente não é possível verificar quais canos estão obstruídos.
+2. Na mesma janela de terminal, digite os seguintes comandos para instalar o pacote responsável por iniciar um servidor SSH e executá-lo.
 
-## Solução
 
-O projeto visa implementar um sistema de robô teleoperado capaz de identificar quais canos estão obstruídos ou não. A princípio, o robô atuará com as máquinas em período fora de funcionamento e após o processo de limpeza já existente nas usinas. Desse modo, a solução terá valor agregado devido ao fato de poder confirmar, através de visão computacional, quais tubos dos reboilers estão realmente limpos ou não.
+```bash
+    sudo apt install openssh-server
+    sudo systemctl enable ssh
+    sudo ufw allow ssh
+    sudo systemctl start ssh
+```
 
-## Inicialização
+3. No sistema operacional do computador que será utilizado para controlar o robô de maneira remota, abra uma janela de terminal e digite o seguinte comando:
 
-Para acessar a documentação do projeto, basta clicar [aqui](https://inteli-college.github.io/2024-1B-T08-EC06-G05/). Para inicializar a documentação do projeto localmente, siga os passos abaixo:
+```bash
+    ssh user@server
+```
 
-### Pré-requisitos
+No comando acima, `user` é o nome de usuário do sistema operacional da Raspberry do Turtlebot 3 e `server` é o ip copiado do passo 1. Caso você esteja usando o Turtlebot 3 do grupo 5, o comando a ser digitado nessa etapa será `ssh sugarz3ro@IpCopiado` .
 
-- Node.js instalado
-- Git instalado e com chave SSH configurada
+4. Digite a senha de usuário que será solicitada pelo terminal.
 
-### Instruções
+5. Com o ssh conectado, digite os seguintes comandos para limitar a comunicação via ROS a um domínio com ID 5 dentro da rede:
 
-1. Através de uma janela de terminal, clone este repositório no seu diretório de preferência através do seguinte comando:
+```bash
+    echo 'export ROS_DOMAIN_ID=5' >> ~/.bashrc
+    source ~/.bashrc
+```
 
-```git clone git@github.com:Inteli-College/2024-1B-T08-EC06-G05.git```
+6. Com o ssh conectado, clone o repositório do projeto no diretório de sua preferência através dos comandos:
 
-2. Na mesma janela de terminal, digite os seguintes comandos de maneira respectiva:
+```bash
+    git clone https://github.com/Inteli-College/2024-1B-T08-EC06-G05.git
+```
 
-```cd 2024-1B-T08-EC06-G05/docs```
+7. Na mesma janela de terminal, altere o IP em dois scripts: `rosbridge_movement.jsx` e `camera.jsx` Com os comandos abaixo:
 
-```npm i```
+```bash
+    cd 2024-1B-T08-EC06-G05/src/frontend/src/components/camera
+    nvim camera.jsx
+    cd ..
+    cd rosbridge_movement/
+    nvim rosbridge_movement/
+```
 
-```npm start```
+Para mudar o IP, após realizar o comando nvim nos dois casos terá uma parte do script como mostrado abaixo. Basta mudar o número contido no url para o IP copiado no passo 1.
 
-3. Acesse a URL que será exibida na janela do terminal.
+```bash
+    ros.current = new ROSLIB.Ros({
+      url: 'ws://10.128.0.30:9090'
+    });
+```
 
-## Histórico de lançamentos
+8. Na mesma janela do terminal, digite o seguinte comando para iniciar a comunicação entre a Raspberry e o microcontrolador do robô, bem como torná-lo apto a receber comandos de movimentação remotamente:
 
-### Sprint 1
+```bash
+    ros2 launch turtlebot3_bringup robot.launch.py
+```
 
-- Arquitetura inicial da solução
-- Entendimento de experiência do Usuário
-- Análise de negócios
+9. Em outra janela de terminal, ainda conectado no ssh, digite o seguinte comando para iniciar o ROSBridge para estabelecer a comunicação entre o robô e a aplicação WEB:
 
-### Sprint 2
+```bash
+    ros2 launch rosbridge_server rosbridge_websocket_launch.xml
+```
 
-- Script de movimentação do robô
-- CLI integrada à movimentação do robô
-- Sistema de segurança para movimentação do robô
+10. Em outra janela de terminal, ainda conectado no ssh, digite os seguintes comandos partindo da raiz do projeto para transmitir as informações da câmera:
 
-### Sprint 3
+```bash
+    cd src/workspace/src/SugarZ3ro_pkg/SugarZ3ro_pkg/
+    python3 sender.py
+```
 
-- Aprimoramento do sistema de segurança
-- Interface de usuário gráfica (frontend)
-- Integração do frontend com a movimentação do robô e com o sistema de segurança
+11. Em outra janela de terminal, desconectado do ssh, digite os seguintes comandos a partir da raiz do projeto para ir até a pasta do frontend e iniciar a aplicação WEB, que já contará com a movimentação do robô e o sistema de segurança integrados:
+
+```bash
+    cd 2024-1B-T08-EC06-G05/src/frontend
+    npm run dev
+```
+

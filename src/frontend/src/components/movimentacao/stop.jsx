@@ -1,14 +1,9 @@
+// src/components/StopButton.js
 import React from 'react';
 
-const MoveBackward = ({ movementhandlers }) => {
-  const handleMouseDown = () => {
-    console.log('Backward button pressed');
-    if (movementhandlers && movementhandlers.backward) {
-      movementhandlers.backward();
-    }
-  };
-
-  const handleMouseUp = () => {
+const StopButton = ({ movementhandlers }) => {
+  const handleClick = () => {
+    console.log('Stop button pressed');
     if (movementhandlers && movementhandlers.stop) {
       movementhandlers.stop();
     }
@@ -16,10 +11,7 @@ const MoveBackward = ({ movementhandlers }) => {
 
   return (
     <button
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onTouchStart={handleMouseDown}
-      onTouchEnd={handleMouseUp}
+      onClick={handleClick}
       className="bg-white border border-black rounded p-2"
     >
       <svg width="20" height="20" viewBox="0 0 20 20" fill="black" style={{ transform: 'rotate(90deg)' }}>
@@ -29,4 +21,4 @@ const MoveBackward = ({ movementhandlers }) => {
   );
 };
 
-export default MoveBackward;
+export default StopButton;
