@@ -1,6 +1,6 @@
 # Turtlebot teleoperado - parte 2
 
-Neste projeto foi feito uma interface para controle de um robô turtlebot3 burger. Além disso, pela interface o usuário consegue ver imagens transmitidas por uma câmera acoplada ao robô. Caso queira ver uma demostração,  [Clique aqui](https://youtu.be/MaPib3cDXwc). Note que esse projeto tem a origem [nesse repositório](https://github.com/Inteli-College/2024-1B-T08-EC06-G05). A única coisa que o autor Mário Ventura Medeiros não tem autoria que está presente nesse repositório é o CSS dos componentes, autoria de [Gustavo Machado](https://github.com/gustavoesteves0).
+Neste projeto foi feito uma interface para controle de um robô turtlebot3 burger. Além disso, pela interface o usuário consegue ver imagens transmitidas por uma câmera acoplada ao robô. Caso queira ver uma demostração,  [Clique aqui](https://youtu.be/MaPib3cDXwc). Note que esse projeto tem a origem [nesse repositório](https://github.com/Inteli-College/2024-1B-T08-EC06-G05). A única coisa que o autor desse projeto não participou ativamente do desenvolvimento do que está presente nesse repositório é o CSS dos componentes, autoria de [Gustavo Machado](https://github.com/gustavoesteves0).
 
 # Mudanças da parte 1 para a parte 2
 
